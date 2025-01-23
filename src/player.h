@@ -7,12 +7,12 @@
 
 typedef struct Player Player;
 struct Player {
-	Coords coords;
+	Vec3 coords;
 	int radius;
 	int height;
 	int speed;
 	State state;
-	Coords direction;
+	Vec3 direction;
 	int health;
 	int shield;
 	int *munitions;
@@ -34,7 +34,7 @@ keys
 |Red    |010|
 |Yellow |100|
 */
-Player initPlayer(Coords c);
+Player initPlayer(Vec3 c);
 
 
 #endif

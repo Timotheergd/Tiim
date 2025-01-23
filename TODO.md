@@ -24,15 +24,16 @@ Each line as one object stored with parameters.
 
 |Type|Variation|Style|Trigger|x|y|z|R|dz|dx1|dy1|dx2|dy2|Vx|Vy|Vz|
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|W=wall|✅|✅|❌|✅|✅|✅|❌|✅|✅|✅|✅|✅|❌|❌|❌|
-|S=Step|✅|✅|❌|✅|✅|✅|❌|✅|✅|✅|✅|✅|❌|❌|❌|
-|C=Ceiling|❌|✅|❌|✅|✅|✅|❌|❌|✅|✅|✅|✅|❌|❌|❌|
-|P=Player|❌|❌|❌|✅|✅|✅|❌|✅|❌|❌|❌|❌|❌|❌|❌|
-|E=Ennemy|✅|✅|✅|✅|✅|✅|❌|✅|❌|❌|❌|❌|❌|❌|❌|
-|I=Item|✅|✅|✅|✅|✅|✅|✅|❌|❌|❌|❌|❌|❌|❌|❌|
+|W=wall         |❌|✅|❌|✅|✅|✅|❌|✅|✅|✅|✅|✅|❌|❌|❌|
+|S=Step         |✅|✅|❌|✅|✅|✅|❌|✅|✅|✅|✅|✅|❌|❌|❌|
+|R=pillar       |❌|✅|❌|✅|✅|✅|❌|✅|✅|✅|✅|✅|❌|❌|❌|
+|C=Ceiling      |❌|✅|❌|✅|✅|✅|❌|❌|✅|✅|✅|✅|❌|❌|❌|
+|P=Player       |❌|❌|❌|✅|✅|✅|❌|✅|❌|❌|❌|❌|❌|❌|❌|
+|E=Ennemy       |✅|✅|✅|✅|✅|✅|❌|✅|❌|❌|❌|❌|❌|❌|❌|
+|I=Item         |✅|✅|✅|✅|✅|✅|✅|❌|❌|❌|❌|❌|❌|❌|❌|
 |L=elevator=Door|✅|✅|✅|✅|✅|✅|✅|✅|✅|✅|✅|✅|✅|✅|✅
-|A=activator|❌|✅|✅|✅|✅|✅|❌|✅|✅|✅|❌|❌|❌|❌|❌|
-|B=Barrel|❌|✅|✅|✅|✅|✅|✅|✅|❌|❌|❌|❌|❌|❌|❌|
+|A=activator    |❌|✅|✅|✅|✅|✅|❌|✅|✅|✅|❌|❌|❌|❌|❌|
+|B=Barrel       |❌|✅|✅|✅|✅|✅|✅|✅|❌|❌|❌|❌|❌|❌|❌|
 
 // for Later
 - Add trees
@@ -42,6 +43,8 @@ Step and Wall redondancy is used as optimisation.
 A wall is used when nothing can go through / on top of the wall
 A step is used to make a step, a window, or a walkable plateform. Therefore, checks are needed to see if the player can step on it, shoot over or under it, ...
 Vz for wall is only used when displaying 3D walls if the player is in an outside zone
+
+A pillar is a round wall
 
 ## Variation
 A Wall can be a rectangular cuboid or a cylinder

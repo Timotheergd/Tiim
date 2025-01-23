@@ -7,12 +7,12 @@
 
 typedef struct Monster Monster;
 struct Monster {
-	Coords coords;
+	Vec3 coords;
 	int radius;
 	int height;
 	int speed;
 	State state;
-	Coords direction;
+	Vec3 direction;
 	int health;
 	int guns;
 };
@@ -24,7 +24,7 @@ guns
 |mitraillette|0100|
 |boule  	 |1000|
 */
-Monster initMonster(Coords c);
+Monster initMonster(Vec3 c);
 
 
 #endif
