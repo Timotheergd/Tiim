@@ -7,6 +7,7 @@
 
 typedef struct Monster Monster;
 struct Monster {
+	unsigned char* texture;
 	Vec3 coords;
 	int radius;
 	int height;

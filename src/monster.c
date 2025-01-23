@@ -7,6 +7,7 @@
 
 Monster initMonster(Vec3 c){
 	Monster p = {
+		.texture=NULL, // TODO
 		.coords=c,
 		.radius=20,
 		.height=50,
