@@ -12,6 +12,7 @@
 
 #include "./src/ressources.h"
 #include "./src/player.h"
+#include "./src/monster.h"
 
 int main(int argc, char *argv[]){
 	printf("Doom Like - Tiim\n");

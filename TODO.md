@@ -86,6 +86,12 @@ A step can make (or not) damages if walken on it
 - activator
 - ceiling
 
+### SOUND
+
+Add sound :
+- Ambiants sounds
+- action sounds
+
 ## TODO
 
 MAKE TESTS
