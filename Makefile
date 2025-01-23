@@ -4,10 +4,10 @@
 CC := gcc
 
 # source files path
-SRC_DIRS := #./src
+SRC_DIRS := ./src
 
 # set the compiler flags
-CFLAGS := #`sdl2-config --libs --cflags` -lSDL2_image -lSDL2_ttf -lm
+CFLAGS := -lGL -lGLU -lglut -lm
 
 # name of executable
 EXEC := tiim
@@ -16,8 +16,8 @@ clean:
 	@ rm -f $(EXEC)
 
 compile:
-	#$(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS)
-	$(CC) main.c -o $(EXEC) $(CFLAGS)
+# $(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS) -ldl -lglfw
+	$(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS)
 
 run:
 	@ ./$(EXEC)
