@@ -25,6 +25,11 @@ Vec3 mulVec3(Vec3 *v1, int a){
 	return v;
 }
 
+Vec3 Vec3projToXY(Vec3 *v){
+	Vec3 vxy = initVec3(v->x, v->y, 0);
+	return vxy;
+}
+
 
 Vec2 initVec2(int i, int j){
 	Vec2 v = {i,j};

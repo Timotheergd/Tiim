@@ -9,6 +9,8 @@ SRC_DIRS := ./src
 # set the compiler flags
 CFLAGS := -lGL -lGLU -lglut -lm
 
+WARNINGFLAGS := -w
+
 # name of executable
 EXEC := tiim
 
@@ -17,7 +19,7 @@ clean:
 
 compile:
 # $(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS) -ldl -lglfw
-	$(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS)
+	$(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS) $(WARNINGFLAGS)
 
 run:
 	@ ./$(EXEC)

@@ -9,6 +9,10 @@
 
 #define FPS 60
 
+
+// TODO :
+// for Vec2 and Vec3, make dot product, addition, ... basic vector operations
+
 // Additional Structs / Enums
 
 typedef enum State State;
@@ -28,6 +32,7 @@ Vec3 initVec3(int i, int j, int k);
 void print_Vec3(Vec3 v);
 Vec3 addVec3(Vec3 *v1, Vec3 *v2);
 Vec3 mulVec3(Vec3 *v1, int a);
+Vec3 Vec3projToXY(Vec3 *v);
 
 typedef struct Vec2 Vec2;
 struct Vec2 {

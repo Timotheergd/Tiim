@@ -11,6 +11,7 @@
 
 
 #include "./src/ressources.h"
+#include "./src/physic.h"
 #include "./src/player.h"
 #include "./src/monster.h"
 #include "./src/wall.h"
