@@ -15,9 +15,16 @@
 #include "./src/player.h"
 #include "./src/monster.h"
 #include "./src/wall.h"
+#include "./src/board.h"
 
 int main(int argc, char *argv[]){
 	printf("Doom Like - Tiim\n");
+  char level_file[50]="./levels/test.lvl";
+  Board board=initBoard();
+  loadLevel(level_file, &board);
+
+  printBoardContent(&board);
+  
 	return 0;
 }
 

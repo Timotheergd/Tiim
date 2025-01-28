@@ -18,8 +18,7 @@ clean:
 	@ rm -f $(EXEC)
 
 compile:
-# $(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS) -ldl -lglfw
-	$(CC) main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS) $(WARNINGFLAGS)
+	$(CC) -O3 main.c $(SRC_DIRS)/*.c -o $(EXEC) $(CFLAGS) $(WARNINGFLAGS)
 
 run:
 	@ ./$(EXEC)

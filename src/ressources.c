@@ -6,7 +6,7 @@ Vec3 initVec3(int i, int j, int k){
 }
 
 void print_Vec3(Vec3 v){
-    printf("v.x=%d, v.y=%d\n, v.z=%d\n", v.x, v.y, v.z);
+    printf("v.x=%d, v.y=%d, v.z=%d\n", v.x, v.y, v.z);
 }
 
 Vec3 addVec3(Vec3 *v1, Vec3 *v2){

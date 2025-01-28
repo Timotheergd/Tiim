@@ -17,16 +17,34 @@ Line LineTo2D(Line* line){
 	return l;
 }
 
+void printLine(Line* l){
+	// printf("point1 = ");
+	// print_Vec3(l->point1);
+	// printf("point2 = ");
+	// print_Vec3(l->point2);
+	// printf("\n");
+	printf("(%d, %d, %d) -> (%d, %d, %d)\n", l->point1.x, l->point1.y, l->point1.z, l->point2.x, l->point2.y, l->point2.z);
 
-Plan initPlan(Vec3 point1, Vec3 point2, Vec3 point3){
+}
 
-	Vec3 minusP1 = mulVec3(&point1, -1);
+
+Plan initPlan(Vec3 coords, Vec3 v, Vec3 w){
+
 
 	Plan p = {
-		.r=point1,
-		.v=addVec3(&point2, &minusP1),
-		.w=addVec3(&point3, &minusP1)
+		.r=coords,
+		.v=v,
+		.w=w
 	};
 	return p;
 }
 
+void printPlan(Plan* p){
+	printf("r = ");
+	print_Vec3(p->r);
+	printf("v = ");
+	print_Vec3(p->v);
+	printf("w = ");
+	print_Vec3(p->w);
+	printf("\n");
+}

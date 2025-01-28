@@ -13,6 +13,7 @@ struct Line {
 
 Line initLine(Vec3 point1, Vec3 point2);
 Line projLineToXY(Line* line);
+void printLine(Line* l);
 
 // INTERSECTIONS
 /*
@@ -26,11 +27,12 @@ https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection#Parametric_form
 // The plan is more like a surface. It has boundaries
 typedef struct Plan Plan;
 struct Plan {
-	Vec3 r; // vec to the origin of the plan
+	Vec3 r; // vec of the origin of the plan
 	Vec3 v;
 	Vec3 w;
 };
 
 Plan initPlan(Vec3 r, Vec3 v, Vec3 w);
+void printPlan(Plan* p);
 
 #endif
