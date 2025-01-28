@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "ressources.h"
+#include "vec.h"
 #include "time.h"
 #include <stdlib.h>
 

@@ -1,4 +1,4 @@
-# Project : Pacman-like
+# Project : Doom-like
 
 Project for school - IMT Nord Europe
 

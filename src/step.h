@@ -2,6 +2,7 @@
 #define STEP_H
 
 #include "ressources.h"
+#include "vec.h"
 
 typedef struct Step Step;
 struct Step {

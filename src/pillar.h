@@ -2,6 +2,7 @@
 #define PILLAR_H
 
 #include "ressources.h"
+#include "vec.h"
 
 typedef struct Pillar Pillar;
 struct Pillar {

@@ -2,6 +2,7 @@
 #define WALL_H
 
 #include "ressources.h"
+#include "vec.h"
 #include "physic.h"
 
 typedef struct Wall Wall;

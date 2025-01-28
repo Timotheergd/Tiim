@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include "ressources.h"
+#include "vec.h"
 #include "physic.h"
 #include "player.h"
 #include "wall.h"

@@ -2,7 +2,7 @@
 #define PHYSIC_H
 
 #include "ressources.h"
-
+#include "vec.h"
 
 // Also works for 2D line by setting one of the parameter to 0. (ex: z=0 for both points)
 typedef struct Line Line;
