@@ -14,6 +14,7 @@ struct Player {
 	int speed;
 	State state;
 	Vec3 direction;
+	int rotSpeed;
 	int health;
 	int shield;
 	int *munitions;
@@ -36,6 +37,6 @@ keys
 |Yellow |100|
 */
 Player initPlayer(Vec3 c);
-
+void printPlayer(Player p);
 
 #endif

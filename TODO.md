@@ -69,10 +69,20 @@ store elements :
 
 -> when displaying the 2d map. Only display seen objects, walls, ... So each object shold have a state value (not seen, seen, consumed / destroyed)
 
+-> add fog on 3d view for better ambiance
+
 ## Upgrade
 
 Differentiate line 2D and 3D
 
+*May be a complex idea to implement* :
+***Gilbert Johnson Keerthi (GJK) algorithm***
+
+[yt link](https://www.youtube.com/watch?v=ajv46BSqcK4)
+
+[wiki link](https://www.youtube.com/watch?v=ajv46BSqcK4)
+
+Be aware that Domm use BSP Trees for colisions (not sure about that)
 
 ### Bugs to fix
 

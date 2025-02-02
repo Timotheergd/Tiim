@@ -12,7 +12,8 @@ Player initPlayer(Vec3 c){
 		.height=50,
 		.speed=4,
 		.state=IDLE,
-		.direction=initVec3(0, 0, 0),
+		.direction=initVec3(0, 0, 1),
+		.rotSpeed=5,
 		.health=100,
 		.shield=0,
 		.munitions=(int*) malloc(4*sizeof(int)),
@@ -21,5 +22,13 @@ Player initPlayer(Vec3 c){
 		.keys=0
 	};
 	return p;
+}
+
+void printPlayer(Player p) {
+	printf("Player : speed=%d, rotSpeed=%d\n", p.speed, p.rotSpeed);
+	printf("\tcoords : ");
+	print_Vec3(p.coords);
+	printf("\tdirection : ");
+	print_Vec3(p.direction);
 }
 

@@ -93,6 +93,7 @@ void loadLevel(char filename[50], Board *board){
                         &type, &x, &y, &z, &dz);
                 // printf("Player is\n: %d\n y: %d\n z: %d\n dz: %d\n",
                 //         x, y, z, dz);
+                    board->player=initPlayer(initVec3(x, y, z));
                 break;
                 
             default:
