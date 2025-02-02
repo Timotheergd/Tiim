@@ -23,7 +23,7 @@ void printLine(Line* l){
 	// printf("point2 = ");
 	// print_Vec3(l->point2);
 	// printf("\n");
-	printf("(%d, %d, %d) -> (%d, %d, %d)\n", l->point1.x, l->point1.y, l->point1.z, l->point2.x, l->point2.y, l->point2.z);
+	printf("(%.2f, %.2f, %.2f) -> (%.2f, %.2f, %.2f)\n", l->point1.x, l->point1.y, l->point1.z, l->point2.x, l->point2.y, l->point2.z);
 
 }
 

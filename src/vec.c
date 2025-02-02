@@ -8,7 +8,7 @@ Vec2 initVec2(float i, float j){
 }
 
 void print_Vec2(Vec2 v){
-    printf("v.x=%f, v.y=%f\n", v.x, v.y);
+    printf("v.x=%.2f, v.y=%.2f\n", v.x, v.y);
 }
 
 Vec2 addVec2(Vec2 *v1, Vec2 *v2){
@@ -33,7 +33,7 @@ Vec3 initVec3(float i, float j, float k){
 }
 
 void print_Vec3(Vec3 v){
-    printf("v.x=%f, v.y=%f, v.z=%f\n", v.x, v.y, v.z);
+    printf("v.x=%.2f, v.y=%.2f, v.z=%.2f\n", v.x, v.y, v.z);
 }
 
 Vec3 addVec3(Vec3 *v1, Vec3 *v2){

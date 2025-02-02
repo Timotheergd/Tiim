@@ -49,6 +49,7 @@ int main(int argc, char **argv){
   printf("main player x = %d\n", board.player.coords.x);
 
   setPlayer(&(board.player));
+  setBoard(&board);
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

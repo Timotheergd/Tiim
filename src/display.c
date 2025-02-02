@@ -12,6 +12,12 @@ void setPlayer(int* player) {
     g_playerPtr = player;
 }
 
+static Board* g_boardPtr = NULL;
+
+void setBoard(int* board) {
+    g_boardPtr = board;
+}
+
 
 void display() {
     if(!g_viewModePtr) {
@@ -49,7 +55,9 @@ void display() {
         //           0.0f, 0.0f, .0f);     // Up vector (Z is up)
     } else {
         // 2D Top View (looking down the Z axis)
-        // Set camera view
+
+
+        // ***** Set camera view *****
 
         float diam = g_playerPtr->radius/100;
         //8.070 
@@ -67,9 +75,8 @@ void display() {
         glLoadIdentity();
 
         gluLookAt(0.0f, 0.0f, 1.0f,    // Camera high above on Z axis
-                  0.0f, 0.0f, 0.0f,      // Looking at origin
-                  0.0f, 1.0f, 0.0f);     // Up vector
-        // glOrtho (-100.0f, 100.0f, -100.0f, 100.0f, 0.0f, 0.0f);
+                  0.0f, 0.0f, 0.0f,    // Looking at origin
+                  0.0f, 1.0f, 0.0f);   // Up vector
 
     }
 
@@ -78,6 +85,7 @@ void display() {
     // Draw each element
     // drawCube();
     drawCameraPosition();
+    drawBoard(g_boardPtr);
     
     glutSwapBuffers();
 }
@@ -93,6 +101,36 @@ float normalizeAngle(float angle) {
     }
     return angle;
 }
+
+void drawBoard(Board* board) {
+        // Draw Walls
+        for(int i=0; i<board->nbWall; i++) {
+            drawWall(&board->wall_list[i]);
+            printf("drawing line %d.....\n", i);
+            printWall(&board->wall_list[i]);
+        }
+}
+
+void drawWall(Wall* wall) {
+    if(!g_viewModePtr) {
+        printf("g_viewModePtr not defined ! Does not go further in drawBoard\n");
+        return 1;
+    }
+    if (*g_viewModePtr == 1) {
+        // 2D view
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glBegin(GL_LINE_LOOP);        
+        for(int i=0; i<4; i++) {
+            glVertex3f(wall->Edges2d[i].point1.x * 2 /  (float)WINDOW_WIDTH, wall->Edges2d[i].point1.y * 2 /  (float)WINDOW_HEIGHT, 0);
+            glVertex3f(wall->Edges2d[i].point2.x * 2 /  (float)WINDOW_WIDTH, wall->Edges2d[i].point2.y * 2 /  (float)WINDOW_HEIGHT, 0);
+        }
+        glEnd();
+    }
+    else {
+        // 3D view
+    }
+}
+
 /*
 void drawCube() {
     if (viewMode == 1) {
@@ -177,9 +215,8 @@ void drawCameraPosition() {
             glEnd();
             
             // Draw direction indicator
-            int lenght = 20000;
-            float dx = cos(g_playerPtr->direction.y * M_PI / 180.0f) * lenght;
-            float dy = sin(g_playerPtr->direction.y * (WINDOW_WIDTH/WINDOW_HEIGHT) * M_PI / 180.0f) * lenght;
+            float dx = cos(g_playerPtr->direction.y * M_PI / 180.0f) * PLAYER_INDICATOR_SIZE_2D;
+            float dy = sin(g_playerPtr->direction.y * (WINDOW_WIDTH/WINDOW_HEIGHT) * M_PI / 180.0f) * PLAYER_INDICATOR_SIZE_2D;
             glBegin(GL_LINES);
                 glVertex2f(g_playerPtr->coords.x * 2 /  (float)WINDOW_WIDTH, g_playerPtr->coords.y * 2 / (float)WINDOW_HEIGHT);
                 glVertex2f((g_playerPtr->coords.x+dx) * 2 /  (float)WINDOW_WIDTH, (g_playerPtr->coords.y+dy) * 2 / (float)WINDOW_HEIGHT);  // Point in the direction of view
