@@ -106,8 +106,8 @@ void drawBoard(Board* board) {
         // Draw Walls
         for(int i=0; i<board->nbWall; i++) {
             drawWall(&board->wall_list[i]);
-            printf("drawing line %d.....\n", i);
-            printWall(&board->wall_list[i]);
+            // printf("drawing line %d.....\n", i);
+            // printWall(&board->wall_list[i]);
         }
 }
 
@@ -257,13 +257,11 @@ void keyboard(unsigned char key, int x, int y) {
     // Calculate movement based on rotation
     float dx = cos(g_playerPtr->direction.y * M_PI / 180.0f) * g_playerPtr->speed;
     float dy = sin(g_playerPtr->direction.y * (WINDOW_WIDTH/WINDOW_HEIGHT) * M_PI / 180.0f) * g_playerPtr->speed;
-    printf("coucou keyboard!\n");
     switch (key) {
         case 'v':  // Toggle view mode
             *g_viewModePtr = !*g_viewModePtr;
-            printf("coucou v!\n");
             break;
-        case 'z':  // Move forward (X axis)
+        case 'z':  // Move forward
             g_playerPtr->coords.x += dx;
             g_playerPtr->coords.y += dy;
             break;

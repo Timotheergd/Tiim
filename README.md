@@ -18,6 +18,18 @@ I don't have any idea :(
 - Write the command : ```$make all```
 - Enjoy :)
 
+## Keybinding
+
+| Key | Action |
+| --- | --- |
+| v | Toggle view mode |
+| z | Move forward |
+| s | Move backward |
+| q | Strafe left |
+| d | Strafe right |
+| a | Turn left |
+| e | Turn right |
+
 ## Add/Change maps
 
 ### How they are stored
