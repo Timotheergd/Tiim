@@ -30,7 +30,7 @@ void printLine(Line* l){
 
 Plan initPlan(Vec3 coords, Vec3 v, Vec3 w){
 
-
+	printf("Init Plan : v (%.2f, %.2f, %.2f)\n", v.x, v.y, v.z);
 	Plan p = {
 		.r=coords,
 		.v=v,

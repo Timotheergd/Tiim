@@ -12,7 +12,7 @@ Player initPlayer(Vec3 c){
 		.height=50,
 		.speed=4,
 		.state=IDLE,
-		.direction=initVec3(0, 0, 1),
+		.direction=initVec3(0, 180, 0),
 		.rotSpeed=5,
 		.health=100,
 		.shield=0,

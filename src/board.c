@@ -2,7 +2,7 @@
 
 Board initBoard(){
 	Board b = {
-        .player=initPlayer(initVec3(0,0,0)), 
+        .player=initPlayer(initVec3(0,0,5)), 
         .wall_list=NULL,
         .nbWall = 0
     };

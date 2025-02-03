@@ -18,8 +18,52 @@ void setBoard(int* board) {
     g_boardPtr = board;
 }
 
+void renderBitmapString(
+		float x,
+		float y,
+		float z,
+		void *font,
+		char *string) {
+
+	char *c;
+	glRasterPos3f(x, y,z);
+	for (c=string; *c != '\0'; c++) {
+		glutBitmapCharacter(font, *c);
+	}
+}
+
+void restorePerspectiveProjection() {
+
+	glMatrixMode(GL_PROJECTION);
+	// restore previous projection matrix
+	glPopMatrix();
+
+	// get back to modelview mode
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void setOrthographicProjection() {
+
+	// switch to projection mode
+	glMatrixMode(GL_PROJECTION);
+
+	// save previous matrix which contains the
+	//settings for the perspective projection
+	glPushMatrix();
+
+	// reset matrix
+	glLoadIdentity();
+
+	// set a 2D orthographic projection
+	gluOrtho2D(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+
+	// switch back to modelview mode
+	glMatrixMode(GL_MODELVIEW);
+}
+
 
 void display() {
+    printf("Begin display\n");
     if(!g_viewModePtr) {
         printf("g_viewModePtr not defined ! Does not go further in display\n");
         return 1;
@@ -31,29 +75,44 @@ void display() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-
+    
+    printf("\n\n\n");
     printf("ViewMode = %d\n", *g_viewModePtr);
     // printf("player x = %d\n", g_playerPtr->coords.x);
     printPlayer(*g_playerPtr);
 
-
+    float zero = 0.0f;
     // Print camera position and rotation
-    // printf("Camera Position: (%.2f, %.2f, %.2f) Rotation: (%.2f, %.2f)\n",
-    //        g_playerPtr->coords.x, g_playerPtr->coords.y, g_playerPtr->coords.z, camRotX, g_playerPtr->direction.y);
-    // *g_viewModePtr = *g_viewModePtr + 1;
+    printf("Camera Position: (%.2f, %.2f, %.2f) Rotation: (%.2f, %.2f)\n",
+           g_playerPtr->coords.x * 2 / (float)WINDOW_WIDTH, g_playerPtr->coords.y * 2 / (float)WINDOW_HEIGHT, g_playerPtr->coords.z, zero, g_playerPtr->direction.y);
 
     if (*g_viewModePtr == 0) {
         // 3D View
 
-        // Set camera view
-        // float lookX = g_playerPtr->coords.x + cos(g_playerPtr->direction.y * M_PI / 180.0f);
-        // float lookY = g_playerPtr->coords.y + sin(g_playerPtr->direction.y * M_PI / 180.0f);
-        // float lookZ = g_playerPtr->coords.z + sin(camRotX * M_PI / 180.0f);
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+        glEnable(GL_DEPTH_TEST);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        reshape(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        float lookX = g_playerPtr->coords.x + cos(g_playerPtr->direction.y * M_PI / 180.0f);
+        float lookY = g_playerPtr->coords.y + sin(g_playerPtr->direction.y * M_PI / 180.0f);
+        float lookZ = g_playerPtr->coords.z + sin(g_playerPtr->direction.z * M_PI / 180.0f);
         
-        // gluLookAt(g_playerPtr->coords.x, g_playerPtr->coords.y, g_playerPtr->coords.z,      // Camera position
-        //           lookX, lookY, lookZ,    // Look at point
-        //           0.0f, 0.0f, .0f);     // Up vector (Z is up)
-    } else {
+        gluLookAt(g_playerPtr->coords.x , g_playerPtr->coords.y, g_playerPtr->coords.z,      // Camera position
+                  lookX, lookY, lookZ,    // Look at point
+                  0.0f, 0.0f, 1.0f);     // Up vector (Z is up)
+        
+        // Draw all elements
+        drawBoard(g_boardPtr);
+        drawFPS();
+        
+        restorePerspectiveProjection();
+
+        glutSwapBuffers();
+        // glutPostRedisplay();
+
+        // reshape(WINDOW_WIDTH, WINDOW_HEIGHT);
+    } else {    
         // 2D Top View (looking down the Z axis)
 
 
@@ -72,24 +131,46 @@ void display() {
         glLoadIdentity();
         glOrtho(left, right, bottom, top, zNear, zFar);
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        // glLoadIdentity();
 
         gluLookAt(0.0f, 0.0f, 1.0f,    // Camera high above on Z axis
                   0.0f, 0.0f, 0.0f,    // Looking at origin
                   0.0f, 1.0f, 0.0f);   // Up vector
 
-    }
-
-    
-
     // Draw each element
-    // drawCube();
     drawCameraPosition();
     drawBoard(g_boardPtr);
     
     glutSwapBuffers();
+
+    }    
 }
 
+void drawFPS() {
+    static int frame;
+    static long time, timebase;
+    static char s[50];
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    // display fps in the top window
+    frame++;
+
+    time=glutGet(GLUT_ELAPSED_TIME);
+    if (time - timebase > 1000) {
+        sprintf(s,"Tiim - FPS:%4.2f",
+            frame*1000.0/(time-timebase));
+        timebase = time;
+        frame = 0;
+    }
+
+    setOrthographicProjection();
+
+    glPushMatrix();
+    glLoadIdentity();
+    renderBitmapString(5,30,0,GLUT_BITMAP_HELVETICA_12,s);
+    glPopMatrix();
+}
 
 
 
@@ -103,12 +184,25 @@ float normalizeAngle(float angle) {
 }
 
 void drawBoard(Board* board) {
-        // Draw Walls
-        for(int i=0; i<board->nbWall; i++) {
-            drawWall(&board->wall_list[i]);
-            // printf("drawing line %d.....\n", i);
-            // printWall(&board->wall_list[i]);
-        }
+
+    if (*g_viewModePtr == 0) {
+        // 3d view
+        // draw ground
+        glColor3f(0.5f, 0.5f, 0.5f);
+        glBegin(GL_QUADS);
+            glVertex3f(-400.0f, -300.0f, -0.0f);
+            glVertex3f(-400.0f,  300.0f, -0.0f);
+            glVertex3f( 400.0f,  300.0f, -0.0f);
+            glVertex3f( 400.0f, -300.0f, -0.0f);
+        glEnd();
+    }
+
+    // Draw Walls
+    for(int i=0; i<board->nbWall; i++) {
+        drawWall(&board->wall_list[i]);
+        // printf("drawing line %d.....\n", i);
+        // printWall(&board->wall_list[i]);
+    }
 }
 
 void drawWall(Wall* wall) {
@@ -120,76 +214,53 @@ void drawWall(Wall* wall) {
         // 2D view
         glColor3f(0.0f, 0.0f, 1.0f);
         glBegin(GL_LINE_LOOP);        
-        for(int i=0; i<4; i++) {
-            glVertex3f(wall->Edges2d[i].point1.x * 2 /  (float)WINDOW_WIDTH, wall->Edges2d[i].point1.y * 2 /  (float)WINDOW_HEIGHT, 0);
-            glVertex3f(wall->Edges2d[i].point2.x * 2 /  (float)WINDOW_WIDTH, wall->Edges2d[i].point2.y * 2 /  (float)WINDOW_HEIGHT, 0);
+        for(int i=0; i<wall->nbEdges2d; i++) {
+            glVertex3f(wall->Edges2d[i].point1.x * 2 / (float)WINDOW_WIDTH, wall->Edges2d[i].point1.y * 2 / (float)WINDOW_HEIGHT, 0);
+            glVertex3f(wall->Edges2d[i].point2.x * 2 / (float)WINDOW_WIDTH, wall->Edges2d[i].point2.y * 2 / (float)WINDOW_HEIGHT, 0);
         }
         glEnd();
     }
     else {
         // 3D view
-    }
-}
-
-/*
-void drawCube() {
-    if (viewMode == 1) {
-        // 2D view - draw with GL_LINE_LOOP (top view)
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glBegin(GL_LINE_LOOP);
-        glVertex3f(-1.0f, -1.0f, 0.0f);
-        glVertex3f(1.0f, -1.0f, 0.0f);
-        glVertex3f(1.0f, 1.0f, 0.0f);
-        glVertex3f(-1.0f, 1.0f, 0.0f);
-        glEnd();
-    } else {
-        // 3D view - draw with GL_QUADS
-        glBegin(GL_QUADS);
-        // Front face (red)
+        glPushMatrix();
+        // glTranslatef(wall->Edges2d[i].point1.x, wall->Edges2d[i].point1.y, wall->Edges2d[i].point1.z);
         glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(1.0f, -1.0f, -1.0f);
-        glVertex3f(1.0f, 1.0f, -1.0f);
-        glVertex3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(1.0f, -1.0f, 1.0f);
+        
+        for(int i=0; i<wall->nbEdges3d; i++) {
+            glBegin(GL_QUADS);
+            // glColor3f(i*0.1f+0.4f, 0.0f, 0.0f);
+            switch(i){
+                case 0: glColor3f(1.0f, 0.0f, 0.0f); break;
+                case 1: glColor3f(0.0f, 1.0f, 0.0f); break;
+                case 2: glColor3f(0.0f, 0.0f, 1.0f); break;
+                case 3: glColor3f(1.0f, 1.0f, 0.0f); break;
+            }
+            // r
+            glVertex3f((wall->Edges3d[i].r.x),
+                       (wall->Edges3d[i].r.y), 
+                        wall->Edges3d[i].r.z);
 
-        // Back face (green)
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(-1.0f, -1.0f, -1.0f);
-        glVertex3f(-1.0f, -1.0f, 1.0f);
-        glVertex3f(-1.0f, 1.0f, 1.0f);
-        glVertex3f(-1.0f, 1.0f, -1.0f);
+            // r + v
+            glVertex3f((wall->Edges3d[i].r.x+wall->Edges3d[i].v.x), 
+                       (wall->Edges3d[i].r.y+wall->Edges3d[i].v.y),
+                        wall->Edges3d[i].r.z);
+         
+            // r + v + w
+            glVertex3f((wall->Edges3d[i].r.x+wall->Edges3d[i].v.x+wall->Edges3d[i].w.x),
+                       (wall->Edges3d[i].r.y+wall->Edges3d[i].v.y+wall->Edges3d[i].w.y),
+                        wall->Edges3d[i].r.z+wall->Edges3d[i].w.z);
 
-        // Top face (blue)
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(-1.0f, -1.0f, 1.0f);
-        glVertex3f(1.0f, -1.0f, 1.0f);
-        glVertex3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(-1.0f, 1.0f, 1.0f);
+            // r + w
+            glVertex3f((wall->Edges3d[i].r.x+wall->Edges3d[i].w.x),
+                       (wall->Edges3d[i].r.y+wall->Edges3d[i].w.y),
+                        wall->Edges3d[i].r.z+wall->Edges3d[i].w.z);
 
-        // Bottom face (yellow)
-        glColor3f(1.0f, 1.0f, 0.0f);
-        glVertex3f(-1.0f, -1.0f, -1.0f);
-        glVertex3f(1.0f, -1.0f, -1.0f);
-        glVertex3f(1.0f, 1.0f, -1.0f);
-        glVertex3f(-1.0f, 1.0f, -1.0f);
-
-        // Right face (magenta)
-        glColor3f(1.0f, 0.0f, 1.0f);
-        glVertex3f(-1.0f, 1.0f, -1.0f);
-        glVertex3f(1.0f, 1.0f, -1.0f);
-        glVertex3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(-1.0f, 1.0f, 1.0f);
-
-        // Left face (cyan)
-        glColor3f(0.0f, 1.0f, 1.0f);
-        glVertex3f(-1.0f, -1.0f, -1.0f);
-        glVertex3f(1.0f, -1.0f, -1.0f);
-        glVertex3f(1.0f, -1.0f, 1.0f);
-        glVertex3f(-1.0f, -1.0f, 1.0f);
-        glEnd();
+            glEnd();
+        }
+        
+        glPopMatrix();
     }
 }
-*/
 
 void drawCameraPosition() {
     if(!g_viewModePtr) {
@@ -211,37 +282,42 @@ void drawCameraPosition() {
             glPointSize(10.0f);
             glBegin(GL_POINTS);
                 // TODO : make a function to get this coords
-                glVertex2f(g_playerPtr->coords.x * 2 /  (float)WINDOW_WIDTH, g_playerPtr->coords.y * 2 / (float)WINDOW_HEIGHT);
+                glVertex2f(g_playerPtr->coords.x * 2 / (float)WINDOW_WIDTH, g_playerPtr->coords.y * 2 / (float)WINDOW_HEIGHT);
             glEnd();
             
             // Draw direction indicator
             float dx = cos(g_playerPtr->direction.y * M_PI / 180.0f) * PLAYER_INDICATOR_SIZE_2D;
             float dy = sin(g_playerPtr->direction.y * (WINDOW_WIDTH/WINDOW_HEIGHT) * M_PI / 180.0f) * PLAYER_INDICATOR_SIZE_2D;
             glBegin(GL_LINES);
-                glVertex2f(g_playerPtr->coords.x * 2 /  (float)WINDOW_WIDTH, g_playerPtr->coords.y * 2 / (float)WINDOW_HEIGHT);
-                glVertex2f((g_playerPtr->coords.x+dx) * 2 /  (float)WINDOW_WIDTH, (g_playerPtr->coords.y+dy) * 2 / (float)WINDOW_HEIGHT);  // Point in the direction of view
+                glVertex2f(g_playerPtr->coords.x * 2 / (float)WINDOW_WIDTH, g_playerPtr->coords.y * 2 / (float)WINDOW_HEIGHT);
+                glVertex2f((g_playerPtr->coords.x+dx) * 2 / (float)WINDOW_WIDTH, (g_playerPtr->coords.y+dy) * 2 / (float)WINDOW_HEIGHT);  // Point in the direction of view
             glEnd();
 
-            glBegin(GL_LINES);
-                glVertex2f(-0.0f, -0.0f);
-                glVertex2f(1.0f, 1.0f);
-            glEnd();
+            // glBegin(GL_LINES);
+            //     glVertex2f(-0.0f, -0.0f);
+            //     glVertex2f(1.0f, 1.0f);
+            // glEnd();
 
-            glBegin(GL_LINES);
-                glVertex2f(-1.0f,-1.0f);
-                glVertex2f(-0.5f, -0.5f);
-            glEnd();
+            // glBegin(GL_LINES);
+            //     glVertex2f(-1.0f,-1.0f);
+            //     glVertex2f(-0.5f, -0.5f);
+            // glEnd();
         glPopMatrix();
     }
 }
 
 void reshape(int w, int h) {
+    printf("Begin reshape\n");
     w = WINDOW_WIDTH;
     h = WINDOW_HEIGHT;
-    glViewport(0, 0, w, h);
+    if (*g_viewModePtr == 0) {
+        glViewport(0, 0, w, h);
+    } else {
+        glViewport(0, w, h, 0);
+    }
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (float)w / h, 0.1f, 100.0f);
+    gluPerspective(45.0f, (float)w / h, 0.1f, 1000.0f);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -277,12 +353,12 @@ void keyboard(unsigned char key, int x, int y) {
             g_playerPtr->coords.x += dy;
             g_playerPtr->coords.y -= dx;
             break;
-        // case 'r':  // Move up (Z axis)
-        //     g_playerPtr->coords.z += MOVE_SPEED;
-        //     break;
-        // case 'f':  // Move down
-        //     g_playerPtr->coords.z -= MOVE_SPEED;
-        //     break;
+        case 'r':  // Move up (Z axis)
+            g_playerPtr->coords.z += g_playerPtr->speed;
+            break;
+        case 'f':  // Move down
+            g_playerPtr->coords.z -= g_playerPtr->speed;
+            break;
         case 'a':  // Turn left
             g_playerPtr->direction.y = normalizeAngle(g_playerPtr->direction.y + g_playerPtr->rotSpeed);
             break;

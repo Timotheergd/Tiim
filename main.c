@@ -35,7 +35,7 @@ int main(int argc, char **argv){
 
   /***** INITIALIZATION *****/
 
-  char level_file[50]="./levels/test.lvl";
+  char level_file[50]="./levels/level1.lvl";
   Board board=initBoard();
   loadLevel(level_file, &board);
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv){
   int viewMode = 0;
   setViewMode(&viewMode);
 
-  printf("main player x = %d\n", board.player.coords.x);
+  printf("main player x = %.2f\n", board.player.coords.x);
 
   setPlayer(&(board.player));
   setBoard(&board);

@@ -29,6 +29,9 @@ I don't have any idea :(
 | d | Strafe right |
 | a | Turn left |
 | e | Turn right |
+| Echap | Exit |
+| r | Move up (to debug) |
+| f | Move down (to debug) |
 
 ## Add/Change maps
 
