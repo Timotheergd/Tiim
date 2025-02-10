@@ -25,6 +25,28 @@ Vec2 mulVec2(Vec2 *v1, float a){
 	return v;
 }
 
+Vec2 absVec2(Vec2 v1) {
+	Vec2 v = initVec2(0, 0);
+	v.x=fabs(v1.x);
+	v.y=fabs(v1.y);
+	return v;
+}
+
+float dist(Vec2 v1, Vec2 v2) {
+	return sqrt(pow(v1.x-v2.x, 2) + pow(v1.y-v2.y, 2));
+}
+
+float crossProduct2D(Vec2 a, Vec2 b) {
+	return a.x*b.y - a.y*b.x; 
+}
+
+float triangleArea(Vec2 a, Vec2 b, Vec2 c) {
+	Vec2 ab = initVec2(b.x - a.x, b.y - a.y);
+    Vec2 ac = initVec2(c.x - a.x, c.y - a.y);
+    return fabs(crossProduct2D(ab, ac)) / 2;
+};
+
+
 /***** VEC 3 *****/
 
 Vec3 initVec3(float i, float j, float k){
@@ -43,6 +65,24 @@ Vec3 addVec3(Vec3 *v1, Vec3 *v2){
 	v.z=v1->z+v2->z;
 	return v;
 }
+
+Vec3 subVec3(Vec3 *v1, Vec3 *v2){
+	Vec3 v = initVec3(0, 0, 0);
+	v.x=v1->x-v2->x;
+	v.y=v1->y-v2->y;
+	v.z=v1->z-v2->z;
+	return v;
+}
+
+Vec3 absSubVec3(Vec3 *v1, Vec3 *v2){
+	Vec3 v = initVec3(0, 0, 0);
+	v.x=fabs(v1->x-v2->x);
+	v.y=fabs(v1->y-v2->y);
+	v.z=fabs(v1->z-v2->z);
+	return v;
+}
+
+
 
 // Vec3 mulVec3(Vec3 *v1, float a){
 // 	Vec3 v = initVec3(0, 0, 0);
@@ -68,7 +108,26 @@ __asm__(".globl mulVec3\n\t"
 		".cfi_endproc"
 );
 
-Vec3 Vec3projToXY(Vec3 *v){
-	Vec3 vxy = initVec3(v->x, v->y, 0);
+
+Vec3 absVec3(Vec3 v1) {
+	Vec3 v = initVec3(0, 0, 0);
+	v.x=fabs(v1.x);
+	v.y=fabs(v1.y);
+	v.z=fabs(v1.z);
+	return v;
+}
+
+Vec3 Vec3projToXY(Vec3 v){
+	Vec3 vxy = initVec3(v.x, v.y, 0);
 	return vxy;
+}
+
+float dotV3(Vec3 u, Vec3 v) {
+	return u.x*v.x + u.y*v.y + u.z*v.z;
+}
+
+/*****************/
+
+Vec2 Vec2FromVec3(Vec3 v){
+	return initVec2(v.x, v.y);
 }

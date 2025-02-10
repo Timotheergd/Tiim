@@ -1,6 +1,9 @@
 #ifndef PHYSIC_H
 #define PHYSIC_H
 
+#include <math.h>
+#include <stdlib.h>
+#include <float.h>
 #include "ressources.h"
 #include "vec.h"
 
@@ -34,5 +37,20 @@ struct Plan {
 
 Plan initPlan(Vec3 r, Vec3 v, Vec3 w);
 void printPlan(Plan* p);
+
+
+typedef struct Circle Circle;
+struct Circle {
+	Vec3 coords; // vec of the origin of the Circle
+	float radius; // radius
+};
+
+Circle initCircle(Vec3 coords, float radius);
+void printCircle(Circle* c);
+
+float distanceLinePoint(Line line, Vec2 point);
+bool collisionLineCircle(Line line, Circle circle);
+bool collisionSegmentCircle(Line line, Circle circle);
+
 
 #endif

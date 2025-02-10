@@ -5,6 +5,7 @@
 #include <time.h>
 #include <math.h>
 #include <sys/time.h>
+#include <float.h>
 
 #include <GL/glut.h>
 
@@ -33,9 +34,16 @@ int main(int argc, char **argv){
 
 	printf("Doom Like - Tiim\n");
 
+  Vec3 p1 = initVec3(1, 3, 0);
+  Vec3 p2 = initVec3(11, 4, 0);
+  Vec2 p3 = initVec2(6, 1);
+  Line l = initLine(p1, p2);
+  float d = distanceLinePoint(l, p3);
+  printf("distance = %f\n", d);
+
   /***** INITIALIZATION *****/
 
-  char level_file[50]="./levels/level1.lvl";
+  char level_file[50]="./levels/test.lvl";
   Board board=initBoard();
   loadLevel(level_file, &board);
 

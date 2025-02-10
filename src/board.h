@@ -6,6 +6,7 @@
 #include "physic.h"
 #include "player.h"
 #include "wall.h"
+#include "physic.h"
 
 
 // store every objects of the map
@@ -23,5 +24,8 @@ Board initBoard();
 void printBoardContent(Board *board); // for debugging
 void loadLevel(char filename[50], Board *board);
 void freeBoard(Board *board);
+
+// Collisions
+bool wallCollision(Player p, Board *board);
 
 #endif

@@ -108,5 +108,25 @@ void loadLevel(char filename[50], Board *board){
     fclose(level_file);
 }
 
+bool wallCollision(Player p, Board *board){
+    // printf("TODO : WALL COLLISION\n");
+    bool isCol = false;
+    Circle playerBound = initCircle(p.coords, p.radius);
+    printCircle(&playerBound);
+    for(int i=0; i<board->nbWall;i++){
+        for(int j=0; j<board->wall_list[i].nbEdges2d;j++) {
+            // printf("i=%d, j=%d\n", i, j);
+            if(collisionSegmentCircle(board->wall_list[i].Edges2d[j], playerBound)){
+                printf("COLLIDE with :");
+                printLine(&board->wall_list[i].Edges2d[j]);
+                // return true;
+                isCol = true;
+            }
+        }
+    }
+    // return false;
+    return isCol;
+}
+
 
 

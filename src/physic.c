@@ -48,3 +48,62 @@ void printPlan(Plan* p){
 	print_Vec3(p->w);
 	printf("\n");
 }
+
+
+
+Circle initCircle(Vec3 coords, float r){
+	Circle c = {
+		.coords=coords,
+		.radius=r,
+	};
+	return c;
+}
+
+void printCircle(Circle* c){
+	printf("coords = ");
+	print_Vec3(c->coords);
+	printf("radius = %f\n", c->radius);
+}
+
+
+float distanceLinePoint(Line line, Vec2 point) {
+	// https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+	// printf("begin distanceLinePoint\n");
+	float x0 = point.x;
+	float y0 = point.y;
+	float x1 = line.point1.x;
+	float x2 = line.point2.x;
+	float y1 = line.point1.y;
+	float y2 = line.point2.y;
+
+	float d = fabs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / sqrt(pow(y2-y1, 2) + pow(x2-x1, 2));
+	// printf("distanceLinePoint = %f\n", d);
+	// printf("end distanceLinePoint\n");
+	return d;
+}
+
+bool collisionLineCircle(Line line, Circle circle) {
+	return distanceLinePoint(line, Vec2FromVec3(circle.coords)) < circle.radius;
+}
+
+
+bool collisionSegmentCircle(Line line, Circle circle) {
+	// Algo from :
+	// https://www.baeldung.com/cs/circle-line-segment-collision-detection
+	float min_dist = FLT_MAX;
+	float max_dist = fmax(dist(Vec2FromVec3(circle.coords), Vec2FromVec3(line.point1)),
+						  dist(Vec2FromVec3(circle.coords), Vec2FromVec3(line.point2))
+						);
+	
+	if ((dotV3(Vec3projToXY(subVec3(&line.point1, &circle.coords)),Vec3projToXY(subVec3(&line.point1, &line.point2))) > 0)		// Dot(OP, QP) > 0
+	 && (dotV3(Vec3projToXY(subVec3(&line.point2, &circle.coords)),Vec3projToXY(subVec3(&line.point2, &line.point1))) > 0) ) {	// and Dot(OQ, PQ) > 0
+		min_dist = 2 * triangleArea(Vec2FromVec3(circle.coords), Vec2FromVec3(line.point1), Vec2FromVec3(line.point2)) / dist(Vec2FromVec3(line.point1), Vec2FromVec3(line.point2));
+	}
+	else {
+		min_dist = fmin(dist(Vec2FromVec3(circle.coords), Vec2FromVec3(line.point1)), dist(Vec2FromVec3(circle.coords), Vec2FromVec3(line.point2)));
+	}
+
+	printf("Distances max = %f - min = %f\t=> collide ? %d \t\tDist proj = %f\n", max_dist, min_dist, (min_dist <= circle.radius) && (max_dist >= circle.radius), (2 * triangleArea(Vec2FromVec3(circle.coords), Vec2FromVec3(line.point1), Vec2FromVec3(line.point2)) / dist(Vec2FromVec3(line.point1), Vec2FromVec3(line.point2))));
+
+	return (min_dist <= circle.radius) && (max_dist >= circle.radius);
+}

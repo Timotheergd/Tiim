@@ -72,6 +72,10 @@ void display() {
         printf("g_playerPtr not defined ! Does not go further in display\n");
         return 1;
     }
+    if(!g_boardPtr) {
+        printf("g_boardPtr not defined ! Does not go further in display\n");
+        return 1;
+    }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -137,11 +141,14 @@ void display() {
                   0.0f, 0.0f, 0.0f,    // Looking at origin
                   0.0f, 1.0f, 0.0f);   // Up vector
 
-    // Draw each element
-    drawCameraPosition();
-    drawBoard(g_boardPtr);
-    
-    glutSwapBuffers();
+        // Display the radius of the player
+        drawCircle(g_playerPtr->coords, g_playerPtr->radius, 100);
+
+        // Draw each element
+        drawCameraPosition();
+        drawBoard(g_boardPtr);
+        
+        glutSwapBuffers();
 
     }    
 }
@@ -187,7 +194,7 @@ void drawBoard(Board* board) {
 
     if (*g_viewModePtr == 0) {
         // 3d view
-        // draw ground
+        // draw Ground
         glColor3f(0.5f, 0.5f, 0.5f);
         glBegin(GL_QUADS);
             glVertex3f(-400.0f, -300.0f, -0.0f);
@@ -200,8 +207,6 @@ void drawBoard(Board* board) {
     // Draw Walls
     for(int i=0; i<board->nbWall; i++) {
         drawWall(&board->wall_list[i]);
-        // printf("drawing line %d.....\n", i);
-        // printWall(&board->wall_list[i]);
     }
 }
 
@@ -276,7 +281,6 @@ void drawCameraPosition() {
         // Draw camera position indicator in 2D view (top-down)
         glPushMatrix();
             glColor3f(1.0f, 1.0f, 1.0f);  // White color
-            // glTranslatef(0.0f, 0.0f, 0.0f);
    
             // Draw position indicator
             glPointSize(10.0f);
@@ -293,15 +297,6 @@ void drawCameraPosition() {
                 glVertex2f((g_playerPtr->coords.x+dx) * 2 / (float)WINDOW_WIDTH, (g_playerPtr->coords.y+dy) * 2 / (float)WINDOW_HEIGHT);  // Point in the direction of view
             glEnd();
 
-            // glBegin(GL_LINES);
-            //     glVertex2f(-0.0f, -0.0f);
-            //     glVertex2f(1.0f, 1.0f);
-            // glEnd();
-
-            // glBegin(GL_LINES);
-            //     glVertex2f(-1.0f,-1.0f);
-            //     glVertex2f(-0.5f, -0.5f);
-            // glEnd();
         glPopMatrix();
     }
 }
@@ -330,6 +325,11 @@ void keyboard(unsigned char key, int x, int y) {
         printf("g_playerPtr not defined ! Does not go further in keyboard\n");
         return 1;
     }
+    if(!g_boardPtr) {
+        printf("g_boardPtr not defined ! Does not go further in keyboard\n");
+        return 1;
+    }
+    wallCollision(*g_playerPtr, g_boardPtr);
     // Calculate movement based on rotation
     float dx = cos(g_playerPtr->direction.y * M_PI / 180.0f) * g_playerPtr->speed;
     float dy = sin(g_playerPtr->direction.y * (WINDOW_WIDTH/WINDOW_HEIGHT) * M_PI / 180.0f) * g_playerPtr->speed;
@@ -370,4 +370,19 @@ void keyboard(unsigned char key, int x, int y) {
             break;
     }
     glutPostRedisplay();
+}
+
+void drawCircle(Vec3 coords, float radius, int num_segments) {
+    glColor3f(0.0, 1.0, 0.0);
+    glPushMatrix();
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < num_segments; i++)   {
+            float theta = 2.0f * 3.1415926f * (float)i / (float)num_segments; //get the current angle
+            float x = radius * cosf(theta);
+            float y = radius * sinf(theta);
+            glVertex2f((x + coords.x) * 2 / (float)WINDOW_WIDTH, (y + coords.y) * 2 / (float)WINDOW_HEIGHT);
+            // printf("theta=%f\tradius=%f\tx + coords.x=%f\ty + coords.y=%f\n", theta, radius, x + coords.x, y + coords.y);
+        }
+        glEnd();
+    glPopMatrix();
 }

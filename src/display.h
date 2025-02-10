@@ -24,7 +24,7 @@ float normalizeAngle(float angle);
 void drawBoard(Board* board);
 void drawWall(Wall* wall);
 void drawCameraPosition();
-//void drawCube();
+void drawCircle(Vec3 coords, float radius, int num_segments);
 
 
 #endif

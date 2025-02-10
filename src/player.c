@@ -8,9 +8,9 @@
 Player initPlayer(Vec3 c){
 	Player p = {
 		.coords=c,
-		.radius=20,
+		.radius=10,
 		.height=50,
-		.speed=4,
+		.speed=2,
 		.state=IDLE,
 		.direction=initVec3(0, 180, 0),
 		.rotSpeed=5,
